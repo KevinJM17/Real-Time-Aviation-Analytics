@@ -17,8 +17,8 @@ params = {
 
 def get_flights_data(endpoint):
     url = f"http://api.aviationstack.com/v1/{endpoint}"
+    
     api_result = requests.get(url, params=params)
-
     api_response = api_result.json()
     flights = api_response['data']
 
@@ -57,8 +57,8 @@ def get_flights_data(endpoint):
 
 def get_airplanes_data(endpoint):
     url = f"http://api.aviationstack.com/v1/{endpoint}"
-    api_result = requests.get(url, params=params)
 
+    api_result = requests.get(url, params=params)
     api_response = api_result.json()
     airplanes = api_response['data']
 
