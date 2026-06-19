@@ -50,9 +50,8 @@ def get_flights_data(endpoint):
         flight_data["live_altitude"] = flight["live"]["altitude"] if flight["live"] else None
         flight_data["live"] = flight["live"]["is_ground"] if flight["live"] else None
         producer.send("flights", value=str(flight_data).encode('utf-8'))
-        producer.flush()
+    producer.flush()
     print("Sent flight data to Kafka......")
-    
     return
 
 def get_airplanes_data(endpoint):
@@ -80,9 +79,8 @@ def get_airplanes_data(endpoint):
         airplane_data["production_line"] = airplane["production_line"]
         airplane_data["registration_number"] = airplane["registration_number"]
         producer.send("airplanes", value=str(airplane_data).encode('utf-8'))
-        producer.flush()
+    producer.flush()
     print("Sent airplane data to Kafka......")
-    
     return
 
 def get_airlines_data(endpoint):
@@ -108,9 +106,8 @@ def get_airlines_data(endpoint):
         airline_data["status"] = airline["status"]
         airline_data["type"] = airline["type"]
         producer.send("airlines", value=str(airline_data).encode('utf-8'))
-        producer.flush()
+    producer.flush()
     print("Sent airline data to Kafka......")
-    
     return
 
 def get_countries_data(endpoint):
@@ -131,9 +128,8 @@ def get_countries_data(endpoint):
         country_data["phone_prefix"] = country["phone_prefix"]
         country_data["population"] = country["population"]
         producer.send("countries", value=str(country_data).encode('utf-8'))
-        producer.flush()
+    producer.flush()
     print("Sent country data to Kafka......")
-    
     return
 
 def get_cities_data(endpoint):
@@ -151,11 +147,10 @@ def get_cities_data(endpoint):
         city_data["city_name"] = city["city_name"]
         city_data["latitude"] = city["latitude"]
         city_data["longitude"] = city["longitude"]
-        city_data["time_zone"] = city["time_zone"]
+        city_data["timezone"] = city["timezone"]
         producer.send("cities", value=str(city_data).encode('utf-8'))
-        producer.flush()
+    producer.flush()
     print("Sent city data to Kafka......")
-    
     return
 
 def get_airports_data(endpoint):
@@ -164,4 +159,20 @@ def get_airports_data(endpoint):
     api_result = requests.get(url, params=params)
     api_response = api_result.json()
     airports = api_response['data']
-    
+
+    for airport in airports:
+        airport_data = dict()
+        airport_data["airport_id"] = airport["id"]
+        airport_data["airport_name"] = airport["airport_name"]
+        airport_data["country_iso2"] = airport["country_iso2"]
+        airport_data["airport_iata"] = airport["iata_code"]
+        airport_data["airport_icao"] = airport["icao_code"]
+        airport_data["city_iata"] = airport["city_iata_code"]
+        airport_data["country_name"] = airport["country_name"]
+        airport_data["latitude"] = airport["latitude"]
+        airport_data["longitude"] = airport["longitude"]
+        airport_data["timezone"] = airport["timezone"]
+        producer.send("airports", value=str(airport_data).encode('utf-8'))
+    producer.flush()
+    print("Sent airport data to Kafka......")
+    return
